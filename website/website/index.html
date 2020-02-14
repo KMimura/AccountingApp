@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="./css/all.css">
+        <link rel="stylesheet" type="text/css" href="./css/accounting.css">
+        <title>Accounting App</title>
+        <meta http-equiv="content-type" charset="utf-8">
+        <meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=0.5,user-scalable=yes,initial-scale=1.0" />
+    </head>
+    <body>
+        <div id="app">
+
+            <!-- ヘッダー -->
+            <div class="header-bar">
+                <p class="header-text">Accounting App</p>
+            </div>
+            <!-- ヘッダーここまで -->
+
+            <!-- サイドバー -->
+            <div class="navi-bar" id="app">
+                <div class="icon pointable" @click="clickBar">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="side-bar" :class="{'hidden':!showSideMenu}">
+                    <div class="side-bar-list" @click="init(); clicked(); showSummary=true">
+                        <i class="fas fa-chart-line"></i> サマリー
+                    </div>
+                    <div class="side-bar-list" @click="init(); clicked(); showInput=true">
+                        <i class="fas fa-pen-square"></i> 記入
+                    </div>
+                    <div  class="side-bar-list" @click="init(); clicked(); showDetail=true">
+                        <i class="fas fa-table"></i> 詳細
+                    </div>
+                    <div class="side-bar-list">
+                        <i class="fas fa-cog"></i> 設定
+                    </div>
+                </div>
+            </div>
+            <!-- サイドバーここまで -->
+
+            <!-- メインコンテンツ -->
+            <div class="main-contents">
+                <div class="date-select">
+                    <p>
+                        <input v-model="fromDate" type="date" class="date-select-input"> ~ <input v-model="toDate" type="date" class="date-select-input">
+                        <button class="pointable date-select-button" @click="clicked()">更新</button>
+                    </p>
+                </div>
+                <chart :dataset="dataset" v-if="showSummary"></chart>
+                <post v-else-if="showInput" v-on:success="showInput = false; showSummary = true; clicked()"></post>
+                <detail :dataset="dataset" v-else-if="showDetail" v-on:deleted="clicked()"></detail>
+            </div>
+            <!-- メインコンテンツここまで -->    
+        </div>
+        <!-- チャート描画 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
+        <!-- Vue.js -->
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
+        <!-- ajax -->
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>    
+        <script src="./js/charts/pieChart.js"></script>
+        <script src="./js/charts/lineChart.js"></script>
+        <script src="./js/summary.js"></script>
+        <script src="./js/input.js"></script>
+        <script src="./js/detail.js"></script>
+        <script src="./js/main.js"></script>
+    </body>
+</html>
