@@ -3,8 +3,8 @@ services:
   web:
     build: ./website/
     ports: 
-      - '8081:80'
+      - '80:80'
   api:
     build: ./api/
     ports:
-      - '8080:3000'
+      - '8081:8080'
