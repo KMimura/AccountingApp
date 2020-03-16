@@ -19,7 +19,7 @@ services:
       TZ: 'Asia/Tokyo'
     ports:
       - 3306:3306
-    command: /bin/bash /usr/src/db/init.sh
+    command: mysql -u test -ptest test < "/usr/src/db/init.sql"
   api:
     depends_on:
       - db
