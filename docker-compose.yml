@@ -4,7 +4,27 @@ services:
     build: ./website/
     ports: 
       - '80:80'
+  db:
+    image: mysql:5.7
+    volumes: 
+      - "/tmp/db/data:/var/lib/mysql"
+      - "./db:/usr/src/db"
+    restart: always
+    hostname: db
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      TZ: 'Asia/Tokyo'
+    ports:
+      - 3306:3306
+    command: /bin/bash /usr/src/db/init.sh
   api:
+    depends_on:
+      - db
     build: ./api/
     ports:
       - '8081:8080'
+    links:
+      - db
