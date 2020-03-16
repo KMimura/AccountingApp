@@ -24,17 +24,13 @@ Vue.component('pie-chart', {
         }
     },
     methods: {
-        /*
-        * 変数の初期化
-        */
+        // 変数の初期化
         init() {
             this.dataList = [];
             this.labelList = [];
             this.colorList = [];
         },
-        /*
-        * パイチャート表示用のデータを作成
-        */
+        // パイチャート表示用のデータを作成
         editPieChartData() {
             rankedByAmount = [];
             for (let data of this.dataset) {
@@ -71,9 +67,7 @@ Vue.component('pie-chart', {
                 count += 1
             }
         },
-        /*
-        * パイチャートの描画
-        */
+        // パイチャートの描画
         createPieChart() {
             //グラフ描画
             let config = {

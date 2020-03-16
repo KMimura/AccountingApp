@@ -14,17 +14,13 @@ var app = new Vue({
         toDate:null
     },
     methods:{
-        /*
-        * 変数を初期化
-        */
+        // 変数を初期化
         init(){
             this.showSummary=false;
             this.showInput = false;
             this.showDetail=false;
         },
-        /*
-        * APIに情報を問い合わせる
-        */
+        // APIに情報を問い合わせる
         clicked(){
             // パラメータとして指定するためフォーマット整形(YYYY-MM-DD => YYYYMMDD) 
             const fromStr = this.fromDate.slice(0,4) + this.fromDate.slice(5,7) + this.fromDate.slice(8,10)
@@ -42,9 +38,7 @@ var app = new Vue({
                 this.showSideMenu = false;
             })
         },
-        /*
-        * サイドメニューを開閉する
-        */
+        // サイドメニューを開閉する
         clickBar(){
             this.showSideMenu = !this.showSideMenu;
         }

@@ -29,23 +29,16 @@ Vue.component('detail', {
         }
     },
     methods:{
-        /*
-        * モーダルウィンドウを表示する
-        * @params data {object} - 選択された取引データ
-        */
+        // モーダルウィンドウを表示する
         onClickItem(data){
             this.shownData = data;
             this.showModal = true;
         },
-        /*
-        * モーダルウィンドウを隠す
-        */
+        // モーダルウィンドウを隠す
         hideModal(){
             this.showModal = false;
         },
-        /*
-        * データの削除後、画面を更新する
-        */
+        // データの削除後、画面を更新する
         updateData(){
             this.$emit("deleted");
         }

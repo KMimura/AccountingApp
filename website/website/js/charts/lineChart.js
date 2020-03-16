@@ -23,16 +23,12 @@ Vue.component('line-chart', {
         }
     },
     methods: {
-        /*
-        * 変数の初期化
-        */
+        // 変数の初期化
         init() {
             this.dataList = [];
             this.labelList = [];
         },
-        /*
-        * パイチャート表示用のデータを作成
-        */
+        // パイチャート表示用のデータを作成
         editLineChartData() {
             let prevDate = ""
             let dataListTemp = []
@@ -52,14 +48,10 @@ Vue.component('line-chart', {
                 }
                 prevDate = data["date"]
             }
-            console.log(dataListTemp)
-            console.log(labelListTemp)
             this.dataList = dataListTemp;
             this.labelList = labelListTemp;
         },
-        /*
-        * パイチャートの描画
-        */
+        // パイチャートの描画
         createLineChart() {
             //グラフ描画
             let config = {

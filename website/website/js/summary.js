@@ -28,9 +28,7 @@ Vue.component('chart', {
         },
     },
     methods:{
-        /*
-        * 期間中の収支を計算
-        */
+        // 期間中の収支を計算
         calcSum(){
             this.totalSum = 0;
             for (let data of this.dataset){
@@ -45,9 +43,7 @@ Vue.component('chart', {
                 this.totalSum = "+" + this.totalSum;
             }
         },
-        /*
-        * チャート切り替えボタン「<<」押下時
-        */
+        // チャート切り替えボタン「<<」押下時
         declimentChartPosition(){
             if(this.showingChartPosition > 0){
                 this.showingChartPosition -= 1;
@@ -55,9 +51,7 @@ Vue.component('chart', {
                 this.showingChartPosition = 1;
             }
         },
-        /*
-        * チャート切り替えボタン「>>」押下時
-        */
+        // チャート切り替えボタン「>>」押下時
         inclimentChartPosition(){
         if(this.showingChartPosition < 1){
             this.showingChartPosition += 1;

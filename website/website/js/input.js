@@ -105,12 +105,7 @@ Vue.component('post', {
         }
     },
     methods: {
-        /*
-        * 数値の入力事項のチェック
-        * @ param num {Integer} - チェック対象の数値
-        * @ returns {boolean} - 適正な値かどうか
-        * 
-        */
+        // 数値の入力事項のチェック
         validateNum(num) {
             if(num <= 0){
                 return false;
@@ -120,12 +115,7 @@ Vue.component('post', {
             }
             return true;
         },
-        /*
-        * 文字列の入力事項のチェック
-        * @ param text {String} - チェック対象の文字
-        * @ returns {boolean} - 適正な値かどうか
-        * 
-        */
+        // 文字列の入力事項のチェック
         validateText(num) {
             if (num.length < 2) {
                 return false;
@@ -135,12 +125,7 @@ Vue.component('post', {
             }
             return true;
         },
-        /*
-        * 日付の入力事項のチェック
-        * @ param date {Object} - チェック対象の日付
-        * @ returns {boolean} - 適正な値かどうか
-        * 
-        */
+        // 日付の入力事項のチェック
         validateDate(date) {
             try{
                 date = new Date(date)
@@ -158,18 +143,11 @@ Vue.component('post', {
                 return false;
             }
         },
-        /*
-        * 真偽の入力事項のチェック
-        * @ param bool {boolean} - チェック対象の値
-        * @ returns {boolean} - 適正な値かどうか
-        * 
-        */
+        // 真偽の入力事項のチェック
         validateBool(bool) {
             return true;
         },
-        /*
-        * データをポスト
-        */
+        // データをポスト
         postData(){
             if(!this.amountValid || !this.dateValid || !this.ifEarningValid || !this.ifCashValid || !this.typeValid){
                 alert("入力が未完です")
@@ -204,9 +182,7 @@ Vue.component('post', {
                 })
             }
         },
-        /*
-        * データを削除
-        */
+        // データを削除
         deleteData(){
             if(!this.showndata){
                 alert("削除するデータがありません")
