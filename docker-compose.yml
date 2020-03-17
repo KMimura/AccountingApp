@@ -19,7 +19,7 @@ services:
       TZ: 'Asia/Tokyo'
     ports:
       - 3306:3306
-    command: mysql -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE < "/usr/src/db/init.sql"
+    #command: mysql -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE < "/usr/src/db/init.sql"
     command: --innodb-use-native-aio=0
   api:
     depends_on:
