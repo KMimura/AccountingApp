@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 type mysqlEnv struct {
@@ -61,6 +63,14 @@ func loadEnvVariables() *mysqlEnv {
 	env.user = os.Getenv("MYSQL_USER")
 	env.password = os.Getenv("MYSQL_PASSWORD")
 	return &env
+}
+
+func connect(env *mysqlEnv) *gorm.DB {
+	db, err := gorm.Open("mysql", env, user+":"+env.password+"@tcp(database)/"+env.database)
+	if err != nil {
+		panic(err.Error())
+	}
+	return db
 }
 
 func getMethod(c *gin.Context, env *mysqlEnv) {
