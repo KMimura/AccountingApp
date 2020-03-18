@@ -29,3 +29,7 @@ services:
       - '8081:8080'
     links:
       - "db:database"
+    environment:
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
