@@ -1,4 +1,4 @@
-const baseUrl = "https://28r3pr7afc.execute-api.ap-northeast-1.amazonaws.com/test?"
+const baseUrl = "/accounting-api/?"
 const config = {headers: {'Content-Type': 'application/json'}}
 const pieColors = ["#22AC38", "#009944", "#009B6B", "#009E96", "#00A0C1", "#00A0E9", "#0086D1", "#0068B7", "#00479D", "#1D2088"]
 
