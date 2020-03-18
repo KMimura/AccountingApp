@@ -1,4 +1,4 @@
-const Url = "https://28r3pr7afc.execute-api.ap-northeast-1.amazonaws.com/test"
+const Url = "/accounting-api/"
 
 
 Vue.component('post', {
