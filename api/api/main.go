@@ -80,14 +80,18 @@ func getMethod(c *gin.Context, env *mysqlEnv) {
 	parameters := c.Request.URL.Query()
 
 	// 必須のパラメーターの取得
-	from, exists := parameters["from"][0]
+	fromParam, exists := parameters["from"]
 	if !exists {
 		log.Println("parameter 'from' is lacking")
+		return
 	}
-	to, exists := parameters["to"][0]
+	from := fromParam[0]
+	toParam, exists := parameters["to"]
 	if !exists {
 		log.Println("parameter 'to' is lacking")
+		return
 	}
+	to := toParam[0]
 
 	// 必須ではないパラメーターの取得
 	var ifearning string
