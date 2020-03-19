@@ -109,8 +109,7 @@ func getMethod(c *gin.Context, env *mysqlEnv) {
 	for _, v := range testValues {
 		for _, c := range forbiddenChars {
 			if strings.Contains(*v, c) {
-				replacedVal := strings.Replace(*v, c, "", -1)
-				*v = replacedVal
+				*v = strings.Replace(*v, c, "", -1)
 			}
 		}
 	}
