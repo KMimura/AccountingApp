@@ -24,7 +24,6 @@ type transactionData struct {
 	date            time.Time
 	transactionType string
 	ifEarning       bool
-	ifCash          bool
 }
 
 func main() {
@@ -38,12 +37,6 @@ func main() {
 	})
 	r.POST("/accounting-api", func(c *gin.Context) {
 		postMethod(c, env)
-		c.JSON(200, gin.H{
-			"state": "success",
-		})
-	})
-	r.PUT("/accounting-api", func(c *gin.Context) {
-		putMethod(c, env)
 		c.JSON(200, gin.H{
 			"state": "success",
 		})
@@ -106,19 +99,15 @@ func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
 	// 必須ではないパラメーターの取得
 	var ifEarning string
 	var transactionType string
-	var ifCash string
 	if ifEarningParam, exists := parameters["ifearning"]; exists {
 		ifEarning = ifEarningParam[0]
 	}
 	if typeParam, exists := parameters["type"]; exists {
 		transactionType = typeParam[0]
 	}
-	if ifCashParam, exists := parameters["ifcash"]; exists {
-		ifCash = ifCashParam[0]
-	}
 
 	// SQLインジェクション対策
-	testValues := []*string{&from, &to, &ifEarning, &transactionType, &ifCash}
+	testValues := []*string{&from, &to, &ifEarning, &transactionType}
 	forbiddenChars := []string{";", "-", "'"}
 	for _, v := range testValues {
 		for _, c := range forbiddenChars {
@@ -136,9 +125,6 @@ func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
 	if transactionType != "" {
 		query += " and type = " + transactionType
 	}
-	if ifCash != "" {
-		query += " and ifcash" + ifCash
-	}
 	query += ";"
 
 	// クエリの送信
@@ -155,22 +141,17 @@ func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
 		var amount int
 		var transactionType string
 		var ifEarning bool
-		var ifCash bool
-		if err := rows.Scan(&date, &amount, &transactionType, &ifEarning, &ifCash); err != nil {
+		if err := rows.Scan(&date, &amount, &transactionType, &ifEarning); err != nil {
 			log.Println(err.Error())
 			panic(err)
 		}
-		result := transactionData{date: date, amount: amount, transactionType: transactionType, ifEarning: ifEarning, ifCash: ifCash}
+		result := transactionData{date: date, amount: amount, transactionType: transactionType, ifEarning: ifEarning}
 		results = append(results, result)
 	}
 	return &results
 }
 
 func postMethod(c *gin.Context, env *mysqlEnv) {
-
-}
-
-func putMethod(c *gin.Context, env *mysqlEnv) {
 
 }
 
