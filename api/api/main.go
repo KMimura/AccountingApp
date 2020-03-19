@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
@@ -66,7 +67,7 @@ func loadEnvVariables() *mysqlEnv {
 }
 
 func connect(env *mysqlEnv) *sql.DB {
-	dbStr := env.user + ":" + env.password + "@/" + env.database
+	dbStr := env.user + ":" + env.password + "@tcp(database)/" + env.database
 	db, err := sql.Open("mysql", dbStr)
 	if err != nil {
 		panic(err.Error())
@@ -79,11 +80,11 @@ func getMethod(c *gin.Context, env *mysqlEnv) {
 	parameters := c.Request.URL.Query()
 
 	// 必須のパラメーターの取得
-	from, exists := parameters["from"]
+	from, exists := parameters["from"][0]
 	if !exists {
 		log.Println("parameter 'from' is lacking")
 	}
-	to, exists := parameters["to"]
+	to, exists := parameters["to"][0]
 	if !exists {
 		log.Println("parameter 'to' is lacking")
 	}
@@ -100,6 +101,18 @@ func getMethod(c *gin.Context, env *mysqlEnv) {
 	}
 	if ifcashParam, exists := parameters["ifcash"]; exists {
 		ifcash = ifcashParam[0]
+	}
+
+	// SQLインジェクション対策
+	testValues := []*string{&from, &to, &ifearning, &transactionType, &ifcash}
+	forbiddenChars := []string{";", "-", "'"}
+	for _, v := range testValues {
+		for _, c := range forbiddenChars {
+			if strings.Contains(*v, c) {
+				replacedVal := strings.Replace(*v, c, "", -1)
+				v = &replacedVal
+			}
+		}
 	}
 }
 
