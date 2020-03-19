@@ -33,10 +33,8 @@ func main() {
 
 	r := gin.Default()
 	r.GET("/accounting-api", func(c *gin.Context) {
-		getMethod(c, env)
-		c.JSON(200, gin.H{
-			"state": "success",
-		})
+		results := getMethod(c, env)
+		c.JSON(200, results)
 	})
 	r.POST("/accounting-api", func(c *gin.Context) {
 		postMethod(c, env)
@@ -77,6 +75,7 @@ func loadEnvVariables() *mysqlEnv {
 	return &env
 }
 
+// connect DBと接続する
 func connect(env *mysqlEnv) *sql.DB {
 	dbStr := env.user + ":" + env.password + "@tcp(database)/" + env.database + "?parseTime=true"
 	db, err := sql.Open("mysql", dbStr)
