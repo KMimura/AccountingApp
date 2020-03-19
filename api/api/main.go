@@ -1,12 +1,12 @@
 package main
 
 import (
+	"database/sql"
 	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type mysqlEnv struct {
@@ -65,8 +65,9 @@ func loadEnvVariables() *mysqlEnv {
 	return &env
 }
 
-func connect(env *mysqlEnv) *gorm.DB {
-	db, err := gorm.Open("mysql", env, user+":"+env.password+"@tcp(database)/"+env.database)
+func connect(env *mysqlEnv) *sql.DB {
+	dbStr := env.user + ":" + env.password + "@/" + env.database
+	db, err := sql.Open("mysql", dbStr)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -74,7 +75,32 @@ func connect(env *mysqlEnv) *gorm.DB {
 }
 
 func getMethod(c *gin.Context, env *mysqlEnv) {
+	db := connect(env)
+	parameters := c.Request.URL.Query()
 
+	// 必須のパラメーターの取得
+	from, exists := parameters["from"]
+	if !exists {
+		log.Println("parameter 'from' is lacking")
+	}
+	to, exists := parameters["to"]
+	if !exists {
+		log.Println("parameter 'to' is lacking")
+	}
+
+	// 必須ではないパラメーターの取得
+	var ifearning string
+	var transactionType string
+	var ifcash string
+	if ifearningParam, exists := parameters["ifearning"]; exists {
+		ifearning = ifearningParam[0]
+	}
+	if typeParam, exists := parameters["type"]; exists {
+		transactionType = typeParam[0]
+	}
+	if ifcashParam, exists := parameters["ifcash"]; exists {
+		ifcash = ifcashParam[0]
+	}
 }
 
 func postMethod(c *gin.Context, env *mysqlEnv) {
