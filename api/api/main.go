@@ -118,12 +118,12 @@ func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
 	}
 
 	// クエリの組み立て
-	query := "select * from " + env.database + " where date between " + from + " and " + to
+	query := "select * from " + env.database + " where t_date between " + from + " and " + to
 	if ifEarning != "" {
-		query += " and ifearning = " + ifEarning
+		query += " and if_earning = " + ifEarning
 	}
 	if transactionType != "" {
-		query += " and type = " + transactionType
+		query += " and t_type = " + transactionType
 	}
 	query += ";"
 
