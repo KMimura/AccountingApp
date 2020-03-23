@@ -32,16 +32,22 @@ func main() {
 
 	r := gin.Default()
 	r.GET("/accounting-api", func(c *gin.Context) {
+		log.Println(c.Request.URL.Host)
+		log.Println(c.Request.URL.Path)
 		results := getMethod(c, env)
 		c.JSON(200, results)
 	})
 	r.POST("/accounting-api", func(c *gin.Context) {
+		log.Println(c.Request.URL.Host)
+		log.Println(c.Request.URL.Path)
 		postMethod(c, env)
 		c.JSON(200, gin.H{
 			"state": "success",
 		})
 	})
 	r.DELETE("/accounting-api", func(c *gin.Context) {
+		log.Println(c.Request.URL.Host)
+		log.Println(c.Request.URL.Path)
 		deleteMethod(c, env)
 		c.JSON(200, gin.H{
 			"state": "success",
