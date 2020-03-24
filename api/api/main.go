@@ -25,6 +25,7 @@ type transactionData struct {
 	date            time.Time
 	transactionType string
 	ifEarning       bool
+	comment         string
 }
 
 func main() {
@@ -167,11 +168,12 @@ func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
 		var amount int
 		var transactionType string
 		var ifEarning bool
-		if err := rows.Scan(&date, &amount, &transactionType, &ifEarning); err != nil {
+		var comment string
+		if err := rows.Scan(&date, &amount, &transactionType, &ifEarning, &comment); err != nil {
 			log.Println(err.Error())
 			panic(err)
 		}
-		result := transactionData{date: date, amount: amount, transactionType: transactionType, ifEarning: ifEarning}
+		result := transactionData{date: date, amount: amount, transactionType: transactionType, ifEarning: ifEarning, comment: comment}
 		results = append(results, result)
 	}
 	return &results

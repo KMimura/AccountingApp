@@ -4,5 +4,6 @@ CREATE TABLE IF NOT EXISTS test
     amount INT(20) NOT NULL,
     t_date DATE NOT NULL,
     t_type CHAR(25),    
-    if_earning BOOLEAN
+    if_earning BOOLEAN,
+    comment CHAR(150)
 );
