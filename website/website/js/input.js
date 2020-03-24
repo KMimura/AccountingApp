@@ -48,19 +48,6 @@ Vue.component('post', {
 				</td>
 			</tr>
 			<tr>
-				<td>現金である</td>
-				<td>
-					<select name="ifCash" v-model="ifCash" class="user_input_box">
-						<option value="true">YES</option>
-						<option value="false">NO</option>
-					</select>
-				</td>
-				<td align="center">
-					<div v-if="ifCashValid"><i class="far fa-check-circle fa-lg my-green"></i></div>
-					<div v-if="!ifCashValid"><i class="far fa-times-circle fa-lg my-red" ></i></div>
-				</td>
-			</tr>
-			<tr>
 				<td>コメント</td>
 				<td><input type="text" v-model="comment" class="user_input_box"> </td>
 			</tr>
@@ -77,13 +64,11 @@ Vue.component('post', {
             "date":null,
             "type":"",
             "ifEarning":false,
-            "ifCash":true,
             "comment":"",
             "amountValid":false,
             "dateValid":false,
             "typeValid":false,
             "ifEarningValid":true,
-            "ifCashValid":true,
             "showDeleteButton":false
         }
     },
@@ -99,9 +84,6 @@ Vue.component('post', {
         },
         ifEarning: function(newVal){
             this.ifEarningValid = this.validateBool(newVal);
-        },
-        ifCash: function(newVal){
-            this.ifCashValid = this.validateBool(newVal);
         }
     },
     methods: {
@@ -149,7 +131,7 @@ Vue.component('post', {
         },
         // データをポスト
         postData(){
-            if(!this.amountValid || !this.dateValid || !this.ifEarningValid || !this.ifCashValid || !this.typeValid){
+            if(!this.amountValid || !this.dateValid || !this.ifEarningValid || !this.typeValid){
                 alert("入力が未完です")
                 return;
             }
@@ -160,7 +142,6 @@ Vue.component('post', {
                     date:this.date,
                     type:this.type,
                     ifEarning:this.ifEarning,
-                    ifCash:this.ifCash,
                     comment:this.comment,
                     id:this.showndata.id
                 }).then((response) => {
@@ -173,7 +154,6 @@ Vue.component('post', {
                     date:this.date,
                     type:this.type,
                     ifEarning:this.ifEarning,
-                    ifCash:this.ifCash,
                     comment:this.comment,
                     id:""
                 }).then((response) => {
@@ -205,11 +185,6 @@ Vue.component('post', {
                 this.ifEarning = "false"
             }else{
                 this.ifEarning = "true"
-            }
-            if(this.showndata.ifcash == 0){
-                this.ifCash = "false"
-            }else{
-                this.ifCash = "true"
             }
             this.comment = this.showndata.comment    
         }else{
