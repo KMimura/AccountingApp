@@ -92,15 +92,14 @@ func setTables(env *mysqlEnv) {
 	db := connect(env)
 	bytes, err := ioutil.ReadFile("/usr/src/api/init.sql")
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 	query := string(bytes)
 	log.Println(query)
-	result, err := db.Exec(query)
+	_, err := db.Exec(query)
 	if err != nil {
 		log.Println(err)
 	}
-	log.Println(result)
 }
 
 func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
