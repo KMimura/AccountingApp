@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"io/ioutil"
 	"log"
 	"os"
 	"strings"
@@ -29,6 +30,8 @@ type transactionData struct {
 func main() {
 	logConfig()
 	env := loadEnvVariables()
+
+	setTables(env)
 
 	r := gin.Default()
 	r.GET("/accounting-api", func(c *gin.Context) {
@@ -82,6 +85,22 @@ func connect(env *mysqlEnv) *sql.DB {
 		panic(err.Error())
 	}
 	return db
+}
+
+// setTables 初回にテーブルを作成する
+func setTables(env *mysqlEnv) {
+	db := connect(env)
+	bytes, err := ioutil.ReadFile("/usr/src/api/init.sql")
+	if err != nil {
+		panic(err)
+	}
+	query := string(bytes)
+	log.Println(query)
+	result, err := db.Exec(query)
+	if err != nil {
+		log.Println(err)
+	}
+	log.Println(result)
 }
 
 func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
