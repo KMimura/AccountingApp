@@ -90,6 +90,7 @@ func connect(env *mysqlEnv) *sql.DB {
 // setTables 初回にテーブルを作成する
 func setTables(env *mysqlEnv) {
 	db := connect(env)
+	defer db.Close()
 	bytes, err := ioutil.ReadFile("/usr/src/api/init.sql")
 	if err != nil {
 		log.Println(err)
@@ -104,6 +105,7 @@ func setTables(env *mysqlEnv) {
 
 func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
 	db := connect(env)
+	defer db.Close()
 	parameters := c.Request.URL.Query()
 
 	// 必須のパラメーターの取得
