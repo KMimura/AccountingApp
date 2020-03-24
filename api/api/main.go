@@ -96,7 +96,7 @@ func setTables(env *mysqlEnv) {
 	}
 	query := string(bytes)
 	log.Println(query)
-	_, err := db.Exec(query)
+	_, err = db.Exec(query)
 	if err != nil {
 		log.Println(err)
 	}
