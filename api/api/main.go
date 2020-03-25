@@ -179,8 +179,85 @@ func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
 	return &results
 }
 
-func postMethod(c *gin.Context, env *mysqlEnv) {
+func postMethod(c *gin.Context, env *mysqlEnv) bool {
+	db := connect(env)
+	defer db.Close()
+	parameters := c.Request.URL.Query()
 
+	// 必須のパラメーターの取得
+	fromParam, exists := parameters["from"]
+	if !exists {
+		log.Println("parameter 'from' is lacking")
+		return false
+	}
+	from := fromParam[0]
+	toParam, exists := parameters["to"]
+	if !exists {
+		log.Println("parameter 'to' is lacking")
+		return false
+	}
+	to := toParam[0]
+	ifEarningParam, exists := parameters["ifearning"]
+	if !exists {
+		log.Println("parameter 'ifearning' is lacking")
+		return false
+	}
+	ifEarning := ifEarningParam[0]
+
+	// 必須ではないパラメーターの取得
+	var transactionType string
+	if typeParam, exists := parameters["type"]; exists {
+		transactionType = typeParam[0]
+	}
+	var comment string
+	if commentParam, exists := parameters["comment"]; exists {
+		comment = commentParam[0]
+	}
+
+	// SQLインジェクション対策
+	testValues := []*string{&from, &to, &ifEarning, &transactionType, &comment}
+	forbiddenChars := []string{";", "-", "'"}
+	for _, v := range testValues {
+		for _, c := range forbiddenChars {
+			if strings.Contains(*v, c) {
+				*v = strings.Replace(*v, c, "", -1)
+			}
+		}
+	}
+
+	// クエリの組み立て
+	query := "select * from " + env.database + " where t_date between " + from + " and " + to
+	if ifEarning != "" {
+		query += " and if_earning = " + ifEarning
+	}
+	if transactionType != "" {
+		query += " and t_type = " + transactionType
+	}
+	query += ";"
+
+	// クエリの送信
+	rows, err := db.Query(query)
+	if err != nil {
+		log.Println(err.Error())
+		panic(err)
+	}
+	defer rows.Close()
+	// 結果を格納する
+	var results []transactionData
+	for rows.Next() {
+		var date time.Time
+		var amount int
+		var transactionType string
+		var ifEarning bool
+		var comment string
+		if err := rows.Scan(&date, &amount, &transactionType, &ifEarning, &comment); err != nil {
+			log.Println(err.Error())
+			panic(err)
+		}
+		result := transactionData{date: date, amount: amount, transactionType: transactionType, ifEarning: ifEarning, comment: comment}
+		results = append(results, result)
+	}
+	return &results
 }
 
 func deleteMethod(c *gin.Context, env *mysqlEnv) {
