@@ -145,7 +145,7 @@ func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
 	}
 
 	// クエリの組み立て
-	query := "select * from " + env.database + " where t_date between " + from + " and " + to
+	query := "select * from transactions where t_date between " + from + " and " + to
 	if ifEarning != "" {
 		query += " and if_earning = " + ifEarning
 	}
@@ -185,24 +185,24 @@ func postMethod(c *gin.Context, env *mysqlEnv) bool {
 	parameters := c.Request.URL.Query()
 
 	// 必須のパラメーターの取得
-	fromParam, exists := parameters["from"]
+	dateParam, exists := parameters["date"]
 	if !exists {
-		log.Println("parameter 'from' is lacking")
+		log.Println("parameter 'date' is lacking")
 		return false
 	}
-	from := fromParam[0]
-	toParam, exists := parameters["to"]
-	if !exists {
-		log.Println("parameter 'to' is lacking")
-		return false
-	}
-	to := toParam[0]
+	date := dateParam[0]
 	ifEarningParam, exists := parameters["ifearning"]
 	if !exists {
 		log.Println("parameter 'ifearning' is lacking")
 		return false
 	}
 	ifEarning := ifEarningParam[0]
+	amountParam, exists := parameters["amount"]
+	if !exists {
+		log.Println("parameter 'amount' is lacking")
+		return false
+	}
+	amount := amountParam[0]
 
 	// 必須ではないパラメーターの取得
 	var transactionType string
@@ -213,9 +213,13 @@ func postMethod(c *gin.Context, env *mysqlEnv) bool {
 	if commentParam, exists := parameters["comment"]; exists {
 		comment = commentParam[0]
 	}
+	var updateID string
+	if updateIDParam, exists := parameters["id"]; exists {
+		updateID = updateIDParam[0]
+	}
 
 	// SQLインジェクション対策
-	testValues := []*string{&from, &to, &ifEarning, &transactionType, &comment}
+	testValues := []*string{&date, &ifEarning, &transactionType, &comment, &updateID, &amount}
 	forbiddenChars := []string{";", "-", "'"}
 	for _, v := range testValues {
 		for _, c := range forbiddenChars {
@@ -225,39 +229,22 @@ func postMethod(c *gin.Context, env *mysqlEnv) bool {
 		}
 	}
 
-	// クエリの組み立て
-	query := "select * from " + env.database + " where t_date between " + from + " and " + to
-	if ifEarning != "" {
-		query += " and if_earning = " + ifEarning
+	var query string
+	if updateID != "" {
+		// 新しく追加する場合
+		query = "insert into transactions (date,ifearning,type,comment,amount) values ('" + date + "'," + ifEarning + ",'" + transactionType + "','" + comment + "'," + amount + ");"
+	} else {
+		// アップデートする場合
+		query = "update transactions set date='" + date + "',ifearning=" + ifEarning + ",type='" + transactionType + "',comment='" + "',amount=" + amount + " where id=" + updateID + ";"
 	}
-	if transactionType != "" {
-		query += " and t_type = " + transactionType
-	}
-	query += ";"
 
 	// クエリの送信
-	rows, err := db.Query(query)
+	_, err := db.Exec(query)
 	if err != nil {
 		log.Println(err.Error())
-		panic(err)
+		return false
 	}
-	defer rows.Close()
-	// 結果を格納する
-	var results []transactionData
-	for rows.Next() {
-		var date time.Time
-		var amount int
-		var transactionType string
-		var ifEarning bool
-		var comment string
-		if err := rows.Scan(&date, &amount, &transactionType, &ifEarning, &comment); err != nil {
-			log.Println(err.Error())
-			panic(err)
-		}
-		result := transactionData{date: date, amount: amount, transactionType: transactionType, ifEarning: ifEarning, comment: comment}
-		results = append(results, result)
-	}
-	return &results
+	return true
 }
 
 func deleteMethod(c *gin.Context, env *mysqlEnv) {
