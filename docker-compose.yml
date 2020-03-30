@@ -4,6 +4,8 @@ services:
     build: ./website/
     ports: 
       - '80:80'
+    links:
+      - "api:apiserver"
   db:
     image: mysql:5.7
     volumes: 
