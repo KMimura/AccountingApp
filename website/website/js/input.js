@@ -1,4 +1,4 @@
-const Url = "/accounting-api/"
+const Url = "/accounting-api"
 
 
 Vue.component('post', {
