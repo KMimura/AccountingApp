@@ -35,7 +35,7 @@ func main() {
 	setTables(env)
 
 	r := gin.Default()
-	r.GET("/accounting-api", func(c *gin.Context) {
+	r.GET("/accounting-api/:from/:to/*ifEarning/*", func(c *gin.Context) {
 		log.Println(c.Request.URL.Host)
 		log.Println(c.Request.URL.Path)
 		results := getMethod(c, env)
