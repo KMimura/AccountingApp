@@ -185,7 +185,7 @@ func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
 		results = append(results, result)
 	}
 	log.Println("DEBUG")
-	for td := range results {
+	for _, td := range results {
 		log.Println(td.amount)
 	}
 	return &results
