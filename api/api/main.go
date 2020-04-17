@@ -183,6 +183,11 @@ func postMethod(c *gin.Context, env *mysqlEnv) bool {
 	db := connect(env)
 	defer db.Close()
 
+	log.Println("debug")
+	log.Println(c.PostForm("date"))
+	log.Println(c.PostForm("ifearning"))
+	log.Println(c.PostForm("amount"))
+
 	// 必須のパラメーターの取得
 	dateParam := c.PostForm("date")
 	if dateParam != "" {
@@ -232,7 +237,7 @@ func postMethod(c *gin.Context, env *mysqlEnv) bool {
 	}
 
 	var query string
-	if updateID != "" {
+	if updateID == "" {
 		// 新しく追加する場合
 		query = "insert into transactions (date,ifearning,type,comment,amount) values ('" + date + "'," + ifEarning + ",'" + transactionType + "','" + comment + "'," + amount + ");"
 	} else {
