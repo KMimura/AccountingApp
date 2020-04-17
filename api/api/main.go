@@ -19,13 +19,13 @@ type mysqlEnv struct {
 	password string
 }
 
-// TransactionData 取引に関するデータ
-type TransactionData struct {
-	Amount          int
-	Date            time.Time
-	TransactionType string
-	IfEarning       bool
-	Comment         string
+// 取引に関するデータ
+type transactionData struct {
+	amount          int
+	date            time.Time
+	transactionType string
+	ifEarning       bool
+	comment         string
 }
 
 type postData struct {
@@ -48,7 +48,11 @@ func main() {
 		log.Println(c.Request.URL.Host)
 		log.Println(c.Request.URL.Path)
 		results := getMethod(c, env)
-		c.JSON(200, *results)
+		response := make([]interface{}, len(*results))
+		for i, result := range *results {
+			response[i] = result
+		}
+		c.JSON(200, response)
 	})
 	r.POST("/accounting-api", func(c *gin.Context) {
 		log.Println(c.Request.URL.Host)
@@ -112,7 +116,7 @@ func setTables(env *mysqlEnv) {
 	}
 }
 
-func getMethod(c *gin.Context, env *mysqlEnv) *[]TransactionData {
+func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
 	db := connect(env)
 	defer db.Close()
 	parameters := c.Request.URL.Query()
@@ -170,7 +174,7 @@ func getMethod(c *gin.Context, env *mysqlEnv) *[]TransactionData {
 	}
 	defer rows.Close()
 	// 結果を格納する
-	var results []TransactionData
+	var results []transactionData
 	for rows.Next() {
 		var date time.Time
 		var amount int
@@ -181,7 +185,7 @@ func getMethod(c *gin.Context, env *mysqlEnv) *[]TransactionData {
 			log.Println(err.Error())
 			panic(err)
 		}
-		result := TransactionData{Date: date, Amount: amount, TransactionType: transactionType, IfEarning: ifEarning, Comment: comment}
+		result := transactionData{date: date, amount: amount, transactionType: transactionType, ifEarning: ifEarning, comment: comment}
 		results = append(results, result)
 	}
 	return &results
