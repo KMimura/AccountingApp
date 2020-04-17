@@ -197,19 +197,19 @@ func postMethod(c *gin.Context, env *mysqlEnv) bool {
 
 	// 必須のパラメーターの取得
 	dateParam := pd.Date
-	if dateParam != "" {
+	if dateParam == "" {
 		log.Println("parameter 'date' is lacking")
 		return false
 	}
 	date := dateParam
 	ifEarningParam := pd.IfEarning
-	if ifEarningParam != "" {
+	if ifEarningParam == "" {
 		log.Println("parameter 'ifearning' is lacking")
 		return false
 	}
 	ifEarning := ifEarningParam
 	amountParam := pd.Amount
-	if amountParam != "" {
+	if amountParam == "" {
 		log.Println("parameter 'amount' is lacking")
 		return false
 	}
@@ -218,17 +218,17 @@ func postMethod(c *gin.Context, env *mysqlEnv) bool {
 	// 必須ではないパラメーターの取得
 	var transactionType string
 	typeParam := pd.Type
-	if typeParam != "" {
+	if typeParam == "" {
 		transactionType = typeParam
 	}
 	var comment string
 	commentParam := pd.Comment
-	if commentParam != "" {
+	if commentParam == "" {
 		comment = commentParam
 	}
 	var updateID string
 	updateIDParam := pd.ID
-	if updateIDParam != "" {
+	if updateIDParam == "" {
 		updateID = updateIDParam
 	}
 
