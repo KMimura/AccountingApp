@@ -48,7 +48,7 @@ func main() {
 		log.Println(c.Request.URL.Host)
 		log.Println(c.Request.URL.Path)
 		results := getMethod(c, env)
-		var response []interface{}
+		response := make([]interface{}, len(*results))
 		for i, r := range *results {
 			response[i] = map[string]interface{}{
 				"amount":    r.amount,
