@@ -182,27 +182,22 @@ func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
 func postMethod(c *gin.Context, env *mysqlEnv) bool {
 	db := connect(env)
 	defer db.Close()
-	parameters := c.Params
-	log.Println("debug")
-	for _, p := range parameters {
-		log.Println(p.Value)
-	}
 
 	// 必須のパラメーターの取得
-	dateParam, exists := parameters.Get("date")
-	if !exists {
+	dateParam := c.PostForm("date")
+	if dateParam != "" {
 		log.Println("parameter 'date' is lacking")
 		return false
 	}
 	date := dateParam
-	ifEarningParam, exists := parameters.Get("ifearning")
-	if !exists {
+	ifEarningParam := c.PostForm("ifearning")
+	if ifEarningParam != "" {
 		log.Println("parameter 'ifearning' is lacking")
 		return false
 	}
 	ifEarning := ifEarningParam
-	amountParam, exists := parameters.Get("amount")
-	if !exists {
+	amountParam := c.PostForm("amount")
+	if amountParam != "" {
 		log.Println("parameter 'amount' is lacking")
 		return false
 	}
@@ -210,15 +205,18 @@ func postMethod(c *gin.Context, env *mysqlEnv) bool {
 
 	// 必須ではないパラメーターの取得
 	var transactionType string
-	if typeParam, exists := parameters.Get("type"); exists {
+	typeParam := c.PostForm("type")
+	if typeParam != "" {
 		transactionType = typeParam
 	}
 	var comment string
-	if commentParam, exists := parameters.Get("comment"); exists {
+	commentParam := c.PostForm("comment")
+	if commentParam != "" {
 		comment = commentParam
 	}
 	var updateID string
-	if updateIDParam, exists := parameters.Get("id"); exists {
+	updateIDParam := c.PostForm("id")
+	if updateIDParam != "" {
 		updateID = updateIDParam
 	}
 
