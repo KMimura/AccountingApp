@@ -28,6 +28,15 @@ type transactionData struct {
 	comment         string
 }
 
+type postData struct {
+	ID        string `json:"id"`
+	Date      string `json:"date"`
+	IfEarning string `json:"ifEarning"`
+	Type      string `json:"type"`
+	Comment   string `json:"comment"`
+	Amount    string `json:"amount"`
+}
+
 func main() {
 	logConfig()
 	env := loadEnvVariables()
@@ -183,25 +192,23 @@ func postMethod(c *gin.Context, env *mysqlEnv) bool {
 	db := connect(env)
 	defer db.Close()
 
-	log.Println("debug")
-	log.Println(c.PostForm("date"))
-	log.Println(c.PostForm("ifearning"))
-	log.Println(c.PostForm("amount"))
+	var pd postData
+	c.BindJSON(&pd)
 
 	// 必須のパラメーターの取得
-	dateParam := c.PostForm("date")
+	dateParam := pd.Date
 	if dateParam != "" {
 		log.Println("parameter 'date' is lacking")
 		return false
 	}
 	date := dateParam
-	ifEarningParam := c.PostForm("ifearning")
+	ifEarningParam := pd.IfEarning
 	if ifEarningParam != "" {
 		log.Println("parameter 'ifearning' is lacking")
 		return false
 	}
 	ifEarning := ifEarningParam
-	amountParam := c.PostForm("amount")
+	amountParam := pd.Amount
 	if amountParam != "" {
 		log.Println("parameter 'amount' is lacking")
 		return false
@@ -210,17 +217,17 @@ func postMethod(c *gin.Context, env *mysqlEnv) bool {
 
 	// 必須ではないパラメーターの取得
 	var transactionType string
-	typeParam := c.PostForm("type")
+	typeParam := pd.Type
 	if typeParam != "" {
 		transactionType = typeParam
 	}
 	var comment string
-	commentParam := c.PostForm("comment")
+	commentParam := pd.Comment
 	if commentParam != "" {
 		comment = commentParam
 	}
 	var updateID string
-	updateIDParam := c.PostForm("id")
+	updateIDParam := pd.ID
 	if updateIDParam != "" {
 		updateID = updateIDParam
 	}
