@@ -183,6 +183,10 @@ func postMethod(c *gin.Context, env *mysqlEnv) bool {
 	db := connect(env)
 	defer db.Close()
 	parameters := c.Params
+	log.Println("debug")
+	for _, p := range parameters {
+		log.Println(p.Value)
+	}
 
 	// 必須のパラメーターの取得
 	dateParam, exists := parameters.Get("date")
