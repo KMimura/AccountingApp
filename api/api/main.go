@@ -182,40 +182,40 @@ func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
 func postMethod(c *gin.Context, env *mysqlEnv) bool {
 	db := connect(env)
 	defer db.Close()
-	parameters := c.Request.URL.Query()
+	parameters := c.Params
 
 	// 必須のパラメーターの取得
-	dateParam, exists := parameters["date"]
+	dateParam, exists := parameters.Get("date")
 	if !exists {
 		log.Println("parameter 'date' is lacking")
 		return false
 	}
-	date := dateParam[0]
-	ifEarningParam, exists := parameters["ifearning"]
+	date := dateParam
+	ifEarningParam, exists := parameters.Get("ifearning")
 	if !exists {
 		log.Println("parameter 'ifearning' is lacking")
 		return false
 	}
-	ifEarning := ifEarningParam[0]
-	amountParam, exists := parameters["amount"]
+	ifEarning := ifEarningParam
+	amountParam, exists := parameters.Get("amount")
 	if !exists {
 		log.Println("parameter 'amount' is lacking")
 		return false
 	}
-	amount := amountParam[0]
+	amount := amountParam
 
 	// 必須ではないパラメーターの取得
 	var transactionType string
-	if typeParam, exists := parameters["type"]; exists {
-		transactionType = typeParam[0]
+	if typeParam, exists := parameters.Get("type"); exists {
+		transactionType = typeParam
 	}
 	var comment string
-	if commentParam, exists := parameters["comment"]; exists {
-		comment = commentParam[0]
+	if commentParam, exists := parameters.Get("comment"); exists {
+		comment = commentParam
 	}
 	var updateID string
-	if updateIDParam, exists := parameters["id"]; exists {
-		updateID = updateIDParam[0]
+	if updateIDParam, exists := parameters.Get("id"); exists {
+		updateID = updateIDParam
 	}
 
 	// SQLインジェクション対策
