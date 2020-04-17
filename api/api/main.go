@@ -246,10 +246,10 @@ func postMethod(c *gin.Context, env *mysqlEnv) bool {
 	var query string
 	if updateID == "" {
 		// 新しく追加する場合
-		query = "insert into transactions (t_date,ifearning,t_type,comment,amount) values ('" + date + "'," + ifEarning + ",'" + transactionType + "','" + comment + "'," + amount + ");"
+		query = "insert into transactions (t_date,if_earning,t_type,comment,amount) values ('" + date + "'," + ifEarning + ",'" + transactionType + "','" + comment + "'," + amount + ");"
 	} else {
 		// アップデートする場合
-		query = "update transactions set t_date='" + date + "',ifearning=" + ifEarning + ",t_type='" + transactionType + "',comment='" + "',amount=" + amount + " where id=" + updateID + ";"
+		query = "update transactions set t_date='" + date + "',if_earning=" + ifEarning + ",t_type='" + transactionType + "',comment='" + "',amount=" + amount + " where id=" + updateID + ";"
 	}
 	log.Println(query)
 
