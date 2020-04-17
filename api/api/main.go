@@ -239,6 +239,7 @@ func postMethod(c *gin.Context, env *mysqlEnv) bool {
 		// アップデートする場合
 		query = "update transactions set date='" + date + "',ifearning=" + ifEarning + ",type='" + transactionType + "',comment='" + "',amount=" + amount + " where id=" + updateID + ";"
 	}
+	log.Println(query)
 
 	// クエリの送信
 	_, err := db.Exec(query)
