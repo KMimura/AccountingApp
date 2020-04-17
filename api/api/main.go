@@ -48,9 +48,15 @@ func main() {
 		log.Println(c.Request.URL.Host)
 		log.Println(c.Request.URL.Path)
 		results := getMethod(c, env)
-		response := make([]interface{}, len(*results))
-		for i, result := range *results {
-			response[i] = result
+		var response []interface{}
+		for i, r := range *results {
+			response[i] = map[string]interface{}{
+				"amount":    r.amount,
+				"comment":   r.comment,
+				"date":      r.date,
+				"ifearning": r.ifEarning,
+				"type":      r.transactionType,
+			}
 		}
 		c.JSON(200, response)
 	})
