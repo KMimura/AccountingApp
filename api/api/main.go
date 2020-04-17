@@ -19,13 +19,13 @@ type mysqlEnv struct {
 	password string
 }
 
-// 取引に関するデータ
-type transactionData struct {
-	amount          int
-	date            time.Time
-	transactionType string
-	ifEarning       bool
-	comment         string
+// TransactionData 取引に関するデータ
+type TransactionData struct {
+	Amount          int
+	Date            time.Time
+	TransactionType string
+	IfEarning       bool
+	Comment         string
 }
 
 type postData struct {
@@ -112,7 +112,7 @@ func setTables(env *mysqlEnv) {
 	}
 }
 
-func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
+func getMethod(c *gin.Context, env *mysqlEnv) *[]TransactionData {
 	db := connect(env)
 	defer db.Close()
 	parameters := c.Request.URL.Query()
@@ -170,7 +170,7 @@ func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
 	}
 	defer rows.Close()
 	// 結果を格納する
-	var results []transactionData
+	var results []TransactionData
 	for rows.Next() {
 		var date time.Time
 		var amount int
@@ -181,7 +181,7 @@ func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
 			log.Println(err.Error())
 			panic(err)
 		}
-		result := transactionData{date: date, amount: amount, transactionType: transactionType, ifEarning: ifEarning, comment: comment}
+		result := TransactionData{Date: date, Amount: amount, TransactionType: transactionType, IfEarning: ifEarning, Comment: comment}
 		results = append(results, result)
 	}
 	return &results
