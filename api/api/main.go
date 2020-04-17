@@ -106,7 +106,6 @@ func setTables(env *mysqlEnv) {
 		log.Println(err)
 	}
 	query := string(bytes)
-	log.Println(query)
 	_, err = db.Exec(query)
 	if err != nil {
 		log.Println(err)
@@ -182,6 +181,9 @@ func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
 			log.Println(err.Error())
 			panic(err)
 		}
+		log.Println("DEBUG")
+		log.Println(date)
+		log.Println(amount)
 		result := transactionData{date: date, amount: amount, transactionType: transactionType, ifEarning: ifEarning, comment: comment}
 		results = append(results, result)
 	}
