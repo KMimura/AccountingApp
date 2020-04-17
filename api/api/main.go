@@ -48,11 +48,7 @@ func main() {
 		log.Println(c.Request.URL.Host)
 		log.Println(c.Request.URL.Path)
 		results := getMethod(c, env)
-		interfaceSlice := make([]interface{}, len(*results))
-		for i, r := range *results {
-			interfaceSlice[i] = r
-		}
-		c.JSON(200, interfaceSlice)
+		c.JSON(200, *results)
 	})
 	r.POST("/accounting-api", func(c *gin.Context) {
 		log.Println(c.Request.URL.Host)
