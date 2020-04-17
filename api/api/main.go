@@ -48,7 +48,11 @@ func main() {
 		log.Println(c.Request.URL.Host)
 		log.Println(c.Request.URL.Path)
 		results := getMethod(c, env)
-		c.JSON(200, results)
+		interfaceSlice := make([]interface{}, len(*results))
+		for i, r := range *results {
+			interfaceSlice[i] = r
+		}
+		c.JSON(200, interfaceSlice)
 	})
 	r.POST("/accounting-api", func(c *gin.Context) {
 		log.Println(c.Request.URL.Host)
@@ -183,10 +187,6 @@ func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
 		}
 		result := transactionData{date: date, amount: amount, transactionType: transactionType, ifEarning: ifEarning, comment: comment}
 		results = append(results, result)
-	}
-	log.Println("DEBUG")
-	for _, td := range results {
-		log.Println(td.amount)
 	}
 	return &results
 }
