@@ -31,7 +31,7 @@ type transactionData struct {
 type postData struct {
 	ID        string `json:"id"`
 	Date      string `json:"date"`
-	IfEarning string `json:"ifEarning"`
+	IfEarning string `json:"ifearning"`
 	Type      string `json:"type"`
 	Comment   string `json:"comment"`
 	Amount    string `json:"amount"`
