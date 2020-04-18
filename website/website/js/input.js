@@ -63,7 +63,7 @@ Vue.component('post', {
             "amount":null,
             "date":null,
             "type":"",
-            "ifEarning":false,
+            "ifEarning":"false",
             "comment":"",
             "amountValid":false,
             "dateValid":false,

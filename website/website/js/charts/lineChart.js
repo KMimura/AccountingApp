@@ -40,7 +40,6 @@ Vue.component('line-chart', {
                 }
                 //前のデータと同一の日付であれば、加算する
                 if (prevDate == data["date"]){
-                    console.log(data)
                     dataListTemp[dataListTemp.length - 1] += data["amount"]
                 }else{
                     dataListTemp.push(data["amount"])
