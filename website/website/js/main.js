@@ -27,9 +27,10 @@ var app = new Vue({
             const toStr = this.toDate.slice(0,4) + this.toDate.slice(5,7) + this.toDate.slice(8,10)
             const getUrl = baseUrl + "from=" + fromStr + "&to=" + toStr;
             axios.get(getUrl, config).then((response) => {
-                let rawData = response.data.body;
+                let rawData = response.data;
                 for (let data of rawData){
                     data['datetime_date'] = new Date(data['date'])
+		    data['date'] = data['datetime_date'].getFullYear() + '/' + (data['datetime_date'].getMonth() + 1) + '/' + data['datetime_date'].getDate();
                 }
                 rawData.sort(function(a,b) {
                     return (a.datetime_date < b.datetime_date ? -1 : 1);
