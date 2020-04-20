@@ -168,7 +168,7 @@ Vue.component('post', {
                 alert("削除するデータがありません")
                 return
             }
-            axios.delete(Url,{data:{id:this.showndata.id}}).then((response) => {
+            axios.delete(Url + "/" + this.showndata.id,{data:{}}).then((response) => {
                 alert("データを削除しました")
                 this.$emit("success");
             })

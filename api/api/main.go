@@ -37,10 +37,6 @@ type postData struct {
 	Amount    string `json:"amount"`
 }
 
-type deleteData struct {
-	ID string `json:"id"`
-}
-
 func main() {
 	logConfig()
 	env := loadEnvVariables()
@@ -78,7 +74,7 @@ func main() {
 			"state": message,
 		})
 	})
-	r.DELETE("/accounting-api", func(c *gin.Context) {
+	r.DELETE("/accounting-api/:id", func(c *gin.Context) {
 		log.Println(c.Request.URL.Host)
 		log.Println(c.Request.URL.Path)
 		res := deleteMethod(c, env)
@@ -291,11 +287,8 @@ func deleteMethod(c *gin.Context, env *mysqlEnv) bool {
 	db := connect(env)
 	defer db.Close()
 
-	var dd deleteData
-	c.BindJSON(&dd)
-
 	// 必須のパラメーターの取得
-	idParam := dd.ID
+	idParam := c.Param("id")
 	if idParam == "" {
 		log.Println("parameter 'id' is lacking")
 		return false
