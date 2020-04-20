@@ -66,7 +66,7 @@ func main() {
 		}
 		c.JSON(200, response)
 	})
-	r.POST("/accounting-api/", func(c *gin.Context) {
+	r.POST("/accounting-api", func(c *gin.Context) {
 		log.Println(c.Request.URL.Host)
 		log.Println(c.Request.URL.Path)
 		res := postMethod(c, env)
@@ -80,7 +80,7 @@ func main() {
 			"state": message,
 		})
 	})
-	r.DELETE("/accounting-api/", func(c *gin.Context) {
+	r.DELETE("/accounting-api", func(c *gin.Context) {
 		log.Println(c.Request.URL.Host)
 		log.Println(c.Request.URL.Path)
 		res := deleteMethod(c, env)
