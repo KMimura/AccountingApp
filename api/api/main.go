@@ -57,6 +57,7 @@ func main() {
 				"date":      r.date,
 				"ifearning": r.ifEarning,
 				"type":      r.transactionType,
+				"id":        r.id,
 			}
 		}
 		c.JSON(200, response)
