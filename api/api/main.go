@@ -37,6 +37,10 @@ type postData struct {
 	Amount    string `json:"amount"`
 }
 
+type deleteData struct {
+	ID string `json:"id"`
+}
+
 func main() {
 	logConfig()
 	env := loadEnvVariables()
@@ -63,17 +67,29 @@ func main() {
 	r.POST("/accounting-api", func(c *gin.Context) {
 		log.Println(c.Request.URL.Host)
 		log.Println(c.Request.URL.Path)
-		postMethod(c, env)
-		c.JSON(200, gin.H{
-			"state": "success",
+		res := postMethod(c, env)
+		status := 200
+		message := "Success"
+		if !res {
+			status = 500
+			message = "Internal Server Error"
+		}
+		c.JSON(status, gin.H{
+			"state": message,
 		})
 	})
 	r.DELETE("/accounting-api", func(c *gin.Context) {
 		log.Println(c.Request.URL.Host)
 		log.Println(c.Request.URL.Path)
-		deleteMethod(c, env)
-		c.JSON(200, gin.H{
-			"state": "success",
+		res := deleteMethod(c, env)
+		status := 200
+		message := "Success"
+		if !res {
+			status = 500
+			message = "Internal Server Error"
+		}
+		c.JSON(status, gin.H{
+			"state": message,
 		})
 	})
 	log.Println("Start Server")
@@ -271,6 +287,37 @@ func postMethod(c *gin.Context, env *mysqlEnv) bool {
 	return true
 }
 
-func deleteMethod(c *gin.Context, env *mysqlEnv) {
+func deleteMethod(c *gin.Context, env *mysqlEnv) bool {
+	db := connect(env)
+	defer db.Close()
+
+	var dd deleteData
+	c.BindJSON(&dd)
+
+	// 必須のパラメーターの取得
+	idParam := dd.ID
+	if idParam == "" {
+		log.Println("parameter 'id' is lacking")
+		return false
+	}
+
+	// SQLインジェクション対策
+	forbiddenChars := []string{";", "-", "'"}
+	for _, c := range forbiddenChars {
+		if strings.Contains(idParam, c) {
+			idParam = strings.Replace(idParam, c, "", -1)
+		}
+	}
+
+	query := "delete from transactions where id = " + idParam + ";"
+	log.Println(query)
+
+	// クエリの送信
+	_, err := db.Exec(query)
+	if err != nil {
+		log.Println(err.Error())
+		return false
+	}
+	return true
 
 }
