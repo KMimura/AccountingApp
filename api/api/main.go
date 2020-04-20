@@ -227,17 +227,17 @@ func postMethod(c *gin.Context, env *mysqlEnv) bool {
 	// 必須ではないパラメーターの取得
 	var transactionType string
 	typeParam := pd.Type
-	if typeParam == "" {
+	if typeParam != "" {
 		transactionType = typeParam
 	}
 	var comment string
 	commentParam := pd.Comment
-	if commentParam == "" {
+	if commentParam != "" {
 		comment = commentParam
 	}
 	var updateID string
 	updateIDParam := pd.ID
-	if updateIDParam == "" {
+	if updateIDParam != "" {
 		updateID = updateIDParam
 	}
 
