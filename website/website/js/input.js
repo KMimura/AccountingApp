@@ -111,7 +111,7 @@ Vue.component('post', {
         validateDate(date) {
             try{
                 date = new Date(date)
-                if(date.getFullYear() <= 2018 || date.getFullYear() > 2050){
+                if(date.getFullYear() <= 2000 || date.getFullYear() > 2099){
                     return false;
                 };
                 if(date.getMonth() < 0 || date.getMonth() >= 12){
@@ -168,6 +168,8 @@ Vue.component('post', {
                 alert("削除するデータがありません")
                 return
             }
+            console.log("DEBUG")
+            console.log(this.showndata)
             axios.delete(Url,{data:{id:this.showndata.id}}).then((response) => {
                 alert("データを削除しました")
                 this.$emit("success");
