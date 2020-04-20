@@ -38,6 +38,10 @@ type postData struct {
 	Amount    string `json:"amount"`
 }
 
+type deleteData struct {
+	ID string `json:"id"`
+}
+
 func main() {
 	logConfig()
 	env := loadEnvVariables()
@@ -290,13 +294,15 @@ func deleteMethod(c *gin.Context, env *mysqlEnv) bool {
 	db := connect(env)
 	defer db.Close()
 
+	var dd deleteData
+	c.BindJSON(&dd)
+
 	// 必須のパラメーターの取得
-	tmp, exists := c.Request.URL.Query()["id"]
-	if exists {
+	idParam := dd.ID
+	if idParam == "" {
 		log.Println("parameter 'id' is lacking")
 		return false
 	}
-	idParam := tmp[0]
 
 	// SQLインジェクション対策
 	forbiddenChars := []string{";", "-", "'"}
