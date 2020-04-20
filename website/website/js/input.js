@@ -137,6 +137,8 @@ Vue.component('post', {
             }
             // 詳細画面から遷移してきた場合は、データをアップデートする
             if(this.showndata){
+                console.log(this)
+                console.log(this.amount)
                 axios.post(Url,{
                     amount:this.amount,
                     date:this.date,

@@ -36,8 +36,6 @@ var app = new Vue({
                     return (a.datetime_date < b.datetime_date ? -1 : 1);
                 });
                 this.dataset = rawData;
-                console.log("DEBUG")
-                console.log(this.dataset)
                 this.showSideMenu = false;
             })
         },
