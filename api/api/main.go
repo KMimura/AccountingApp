@@ -175,7 +175,7 @@ func getMethod(c *gin.Context, env *mysqlEnv) *[]transactionData {
 	}
 
 	// クエリの組み立て
-	query := "select t_date,amount,t_type,if_earning,comment from transactions where t_date between " + from + " and " + to
+	query := "select t_date,amount,t_type,if_earning,comment,id from transactions where t_date between " + from + " and " + to
 	if ifEarning != "" {
 		query += " and if_earning = " + ifEarning
 	}
