@@ -168,8 +168,6 @@ Vue.component('post', {
                 alert("削除するデータがありません")
                 return
             }
-            console.log("DEBUG")
-            console.log(this.showndata)
             axios.delete(Url,{data:{id:this.showndata.id}}).then((response) => {
                 alert("データを削除しました")
                 this.$emit("success");
