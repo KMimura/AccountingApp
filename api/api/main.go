@@ -60,7 +60,7 @@ func main() {
 		}
 		c.JSON(200, response)
 	})
-	r.POST("/accounting-api", func(c *gin.Context) {
+	r.POST("/accounting-api/", func(c *gin.Context) {
 		log.Println(c.Request.URL.Host)
 		log.Println(c.Request.URL.Path)
 		res := postMethod(c, env)
@@ -74,7 +74,7 @@ func main() {
 			"state": message,
 		})
 	})
-	r.DELETE("/accounting-api/:id", func(c *gin.Context) {
+	r.DELETE("/accounting-api/", func(c *gin.Context) {
 		log.Println(c.Request.URL.Host)
 		log.Println(c.Request.URL.Path)
 		res := deleteMethod(c, env)
@@ -288,11 +288,12 @@ func deleteMethod(c *gin.Context, env *mysqlEnv) bool {
 	defer db.Close()
 
 	// 必須のパラメーターの取得
-	idParam := c.Param("id")
-	if idParam == "" {
+	tmp, exists := c.Request.URL.Query()["id"]
+	if exists {
 		log.Println("parameter 'id' is lacking")
 		return false
 	}
+	idParam := tmp[0]
 
 	// SQLインジェクション対策
 	forbiddenChars := []string{";", "-", "'"}
