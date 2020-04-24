@@ -117,7 +117,7 @@ func loadEnvVariables() *mysqlEnv {
 
 // connect DBと接続する
 func connect(env *mysqlEnv) *sql.DB {
-	dbStr := env.user + ":" + env.password + "@tcp(database)/" + env.database + "?parseTime=true"
+	dbStr := env.user + ":" + env.password + "@tcp(db)/" + env.database + "?parseTime=true"
 	db, err := sql.Open("mysql", dbStr)
 	if err != nil {
 		panic(err.Error())

@@ -1,6 +1,6 @@
-FROM nginx
+FROM nginx:alpine
 
 COPY ./nginx/website.conf /etc/nginx/conf.d
 RUN rm /etc/nginx/conf.d/default.conf
-RUN mkdir -p /var/www/accounting
-ADD ./website /var/www/accounting
+WORKDIR mkdir -p /var/www/accounting
+COPY ./website /var/www/accounting
