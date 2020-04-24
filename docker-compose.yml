@@ -17,6 +17,7 @@ services:
       MYSQL_USER: ${MYSQL_USER:-test}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-test}
       TZ: 'Asia/Tokyo'
+    container_name: db
     ports:
       - 3306:3306
     #command: mysql -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE < "/usr/src/db/init.sql"
@@ -29,3 +30,4 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-test}
       MYSQL_USER: ${MYSQL_USER:-test}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-test}
+    container_name: apiserver
